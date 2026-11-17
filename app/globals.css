@@ -1,26 +1,293 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Design Tokens ────────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  /* Primary – Soft Blue (from reference) */
+  --color-primary-blue: #8BBFD5;
+  --color-secondary-blue: #78AEC6;
+  --color-light-blue-bg: #EFF4F8;
+  --color-input-bg: #E8F0FE;
+  --color-white: #FFFFFF;
+  --color-primary-text: #263445;
+  --color-secondary-text: #8995A8;
+  --color-border: #DCE6ED;
+
+  /* Brand aliases */
+  --color-brand: #8BBFD5;
+  --color-brand-hover: #78AEC6;
+  --color-brand-dark: #263445;
+
+  /* Semantic */
+  --color-bg: var(--color-light-blue-bg);
+  --color-surface: var(--color-white);
+  --color-border-default: var(--color-border);
+
+  --color-success: #16a34a;
+  --color-success-bg: #dcfce7;
+  --color-warning: #d97706;
+  --color-warning-bg: #fef3c7;
+  --color-danger: #dc2626;
+  --color-danger-bg: #fee2e2;
+  --color-info: #0284c7;
+  --color-info-bg: #e0f2fe;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.06);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.10), 0 8px 10px -6px rgb(0 0 0 / 0.06);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  color-scheme: dark;
+
+  --color-bg: #0b1120;
+  --color-surface: #111827;
+  --color-border-default: #1e2d45;
+  --color-primary-text: #e2e8f0;
+  --color-secondary-text: #94a3b8;
+  --color-input-bg: #1e293b;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Base ─────────────────────────────────────────────────────────────────── */
+html, body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  @apply bg-[var(--color-bg)] text-[var(--color-primary-text)] dark:bg-[#0b1120] dark:text-slate-100;
+}
+
+/* ─── Scrollbars ───────────────────────────────────────────────────────────── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 191, 213, 0.5) transparent;
+}
+*::-webkit-scrollbar { width: 6px; height: 6px; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(139, 191, 213, 0.5);
+  border-radius: 9999px;
+}
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* ─── Focus Rings ──────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-primary-blue);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ─── Utility Classes ──────────────────────────────────────────────────────── */
+
+/* Cards */
+.card {
+  @apply bg-white dark:bg-slate-900 rounded-xl border border-[var(--color-border)] dark:border-slate-800;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-normal);
+}
+.card:hover { box-shadow: var(--shadow-md); }
+
+/* Premium Input */
+.input-field {
+  @apply w-full px-4 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-input-bg)] text-[var(--color-primary-text)] placeholder-[var(--color-secondary-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-blue)] focus:border-transparent transition text-sm dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100;
+  box-shadow: inset 0 1px 2px 0 rgb(0 0 0 / 0.02);
+}
+.input-field:hover:not(:focus) {
+  @apply border-[var(--color-secondary-blue)] dark:border-slate-600;
+}
+
+/* Primary Button */
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--color-primary-blue)] hover:bg-[var(--color-secondary-blue)] active:bg-[var(--color-secondary-blue)] text-white font-semibold text-sm transition disabled:opacity-50 disabled:cursor-not-allowed;
+  box-shadow: 0 1px 3px rgb(139 191 213 / 0.4);
+}
+.btn-primary:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgb(139 191 213 / 0.4);
+  transform: translateY(-1px);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-[var(--color-border)] text-[var(--color-primary-text)] font-medium text-sm hover:bg-[var(--color-light-blue-bg)] transition disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800;
+}
+
+/* Danger Button */
+.btn-danger {
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-semibold text-sm transition disabled:opacity-50;
+}
+
+/* Badge / Pill */
+.badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap;
+}
+.badge-blue { @apply bg-[#E8F0FE] text-[#263445] dark:bg-blue-900/40 dark:text-blue-300; }
+.badge-green { @apply bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300; }
+.badge-red { @apply bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300; }
+.badge-amber { @apply bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300; }
+.badge-purple { @apply bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300; }
+.badge-gray { @apply bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300; }
+
+/* Table Styles */
+.data-table thead tr {
+  @apply bg-[var(--color-light-blue-bg)] dark:bg-slate-800/70;
+}
+.data-table thead th {
+  @apply px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-[var(--color-secondary-text)] dark:text-slate-400;
+}
+.data-table tbody tr {
+  @apply border-t border-[var(--color-border)] dark:border-slate-800 transition-colors;
+}
+.data-table tbody tr:hover {
+  @apply bg-[#E8F0FE]/50 dark:bg-slate-800/40;
+}
+.data-table td {
+  @apply px-4 py-3 text-sm text-[var(--color-primary-text)] dark:text-slate-300;
+}
+
+/* Loading spinner */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.25s ease-out both; }
+
+/* Slide-in for sidebar */
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+/* Modal entrance */
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal-enter { animation: modalIn 0.2s ease-out both; }
+
+/* Page section title */
+.section-title {
+  @apply text-xs font-bold uppercase tracking-widest text-[var(--color-secondary-text)] dark:text-slate-500;
+}
+
+/* Subtle panel bg */
+.panel-bg {
+  @apply bg-[var(--color-light-blue-bg)]/80 dark:bg-slate-800/50 rounded-lg border border-[var(--color-border)] dark:border-slate-700;
+}
+
+/* ApexCharts Tooltip CSS */
+.apexcharts-tooltip { background: #f3f3f3; color: #333; }
+.dark .apexcharts-tooltip {
+  background: #1e293b;
+  color: #cbd5e1;
+  border-color: #334155;
+}
+.apexcharts-tooltip-title { background: #eceff1; border-bottom: 1px solid #ddd; }
+.dark .apexcharts-tooltip-title { background: #0f172a; border-bottom-color: #1e293b; }
+
+/* ─── React DatePicker Responsive & Dark Theme ──────────────────────────── */
+.react-datepicker-wrapper {
+  display: block !important;
+  width: 100% !important;
+}
+
+.react-datepicker__input-container {
+  display: block !important;
+  width: 100% !important;
+}
+
+.react-datepicker-popper {
+  z-index: 50 !important;
+  max-width: calc(100vw - 24px) !important;
+}
+
+/* Datepicker dark mode */
+.dark .react-datepicker {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+  color: #f1f5f9 !important;
+  font-family: inherit !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark .react-datepicker__header {
+  background-color: #1e293b !important;
+  border-bottom-color: #334155 !important;
+}
+
+.dark .react-datepicker__current-month,
+.dark .react-datepicker-time__header,
+.dark .react-datepicker__day-name {
+  color: #e2e8f0 !important;
+}
+
+.dark .react-datepicker__day {
+  color: #cbd5e1 !important;
+}
+
+.dark .react-datepicker__day:hover {
+  background-color: #334155 !important;
+}
+
+.dark .react-datepicker__day--selected,
+.dark .react-datepicker__day--keyboard-selected,
+.dark .react-datepicker__day--in-range {
+  background-color: #8BBFD5 !important;
+  color: #ffffff !important;
+}
+
+.dark .react-datepicker__day--disabled {
+  color: #64748b !important;
+}
+
+.dark .react-datepicker__time-container {
+  border-left-color: #334155 !important;
+  background-color: #0f172a !important;
+}
+
+.dark .react-datepicker__time-container .react-datepicker__time {
+  background-color: #0f172a !important;
+}
+
+.dark .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item {
+  color: #cbd5e1 !important;
+}
+
+.dark .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item:hover {
+  background-color: #334155 !important;
+}
+
+.dark .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item--selected {
+  background-color: #8BBFD5 !important;
+  color: #ffffff !important;
 }
